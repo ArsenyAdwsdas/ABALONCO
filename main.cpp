@@ -53,7 +53,7 @@ int main(int argc, char const *argv[]){
 	#endif
 	while(1){
 		SDL_Event e;while(SDL_PollEvent(&e)){
-			if constexpr(SDL_RESIZE_BLOCK)if(e.type==SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED&&!ABALONCO::GUI::eventsInMain){w->core->noLongerResizing();ABALONCO::GUI::eventsInMain=1;}
+			if constexpr(SDL_RESIZE_BLOCK)if(e.type==SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED&&!ABALONCO::GUI::eventsInMain){Window::ids[e.window.windowID]->core->noLongerResizing();ABALONCO::GUI::eventsInMain=1;}
 			eventHandle(e);
 		}
 		for(uint16_t i=0;i<Window::ids.count;i++)if(auto w=Window::ids.raw[i].second){

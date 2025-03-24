@@ -17,7 +17,8 @@ namespace ABALONCO{
 		void ActionSupport::Keyboard::key_down(SDL_KeyboardEvent&e){}
 		void ActionSupport::Keyboard::key_up(SDL_KeyboardEvent&e){}
 		void Mode::resize(SDL_WindowEvent&e){}
-		void Mode::resizeWatch(SDL_WindowEvent&){}
+		void Mode::nowResizing(){}
+		void Mode::noLongerResizing(){}
 		void Mode::key_focus(){}
 		void Mode::key_unfocus(){}
 		void Mode::close(){delete window;delete this;}
