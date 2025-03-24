@@ -1,0 +1,5 @@
+.vscode
+comp_args*.txt
+#Won't reveal these for now.
+window.h
+grid.h
