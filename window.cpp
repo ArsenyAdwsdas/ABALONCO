@@ -16,6 +16,7 @@ namespace ABALONCO{
 		void ActionSupport::CursorIO::cursor_out(){}
 		void ActionSupport::Keyboard::key_down(SDL_KeyboardEvent&e){}
 		void ActionSupport::Keyboard::key_up(SDL_KeyboardEvent&e){}
+		void Mode::window_set(){}
 		void Mode::resize(SDL_WindowEvent&e){}
 		void Mode::nowResizing(){}
 		void Mode::noLongerResizing(){}
@@ -43,9 +44,12 @@ namespace ABALONCO{
 			_.vIed%={ {{a.x[0],a.x[1]},c}, {{a.x[0],b.x[1]},c}, {{b.x[0],a.x[1]},c}, {{b.x[0],b.x[1]},c} };
 		}
 		inline void Window::ScheduleRectSized(Vector<float>a,Vector<float>s,SDL_FColor c){ScheduleRect(a,a+s,c);}
-		inline void Window::Present(){
+		inline void Window::Unschedule(){
 			SDL_RenderGeometry(_.r,0,_.vIed.raw,_.vIed.cou,_.vI.raw,_.vI.cou);
 			_.vIed.cou=_.vI.cou=0;
+		}
+		inline void Window::Present(){
+			Unschedule();
 			SDL_RenderPresent(_.r);
 		}
 	}

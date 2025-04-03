@@ -1,5 +1,5 @@
 #pragma once
-#include<Standlos/Collies.h>
+#include"hidden/list.h"
 #include<Standlos/Templatery.h>
 namespace ABALONCO{
 	extern bool close;
@@ -13,15 +13,18 @@ namespace ABALONCO{
 		uint16_t dataType;//(uint16_t)-1 to allow any
 		const char*desc=0;
 	};
-	template<uint16_t n=1>struct BlockDef{
+	struct Block;
+	struct BlockFuncs{
+		virtual void die(Block&);
+	};
+	template<uint16_t n=1>struct BlockDef:BlockFuncs{
 		constexpr static uint16_t N=n;
-		uint16_t id;
 		const uint16_t nodeCount=n;
 		Node nodes[n];
-		constexpr inline BlockDef(uint16_t i,Node(&&N)[n]){id=i;constexpr_for<0,n>([&](auto i){nodes[i]=(Node&&)N[i];});}
+		constexpr inline BlockDef(Node(&&N)[n]){constexpr_for<0,n>([&](auto i){nodes[i]=(Node&&)N[i];});}
 	};
 	struct Block{
-		static List2<BlockDef<>*>types;
+		static List<BlockDef<>*,uint16_t>types;
 		const uint16_t id;
 		uint16_t d1,d2,d3;
 		union{
