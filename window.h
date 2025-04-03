@@ -18,6 +18,7 @@
 #endif
 #include"hidden/meth.h"
 #include"hidden/list.h"
+#include<chrono>
 constexpr inline SDL_Point SDL_point(Vector<int>f){return{f.x[0],f.x[1]};}
 constexpr inline SDL_FPoint SDL_Fpoint(Vector<float>f){return{f.x[0],f.x[1]};}
 namespace ABALONCO{
@@ -57,6 +58,8 @@ namespace ABALONCO{
 			static Window*keyFocus,*cursorFocus;
 			Vector<int>size={800,600};
 			bool redraw=1;
+			TimeT drawTime0=TimeT{0},drawTime=drawTime0;
+			Fitty<MaxFPS>fps=90;inline void setFPS(Fitty<MaxFPS>f){fps=duration_cast<TimeT>(std::chrono::seconds(1)).count()/(_.fps_interval=duration_cast<TimeT>(std::chrono::seconds(1))/f).count();}
 			bool keyDown[SDL_SCANCODE_COUNT]={0};
 			Mode*core=0;
 			struct{
@@ -70,12 +73,15 @@ namespace ABALONCO{
 				SDL_Surface*s=0;
 				List<SDL_Vertex,int>vIed;
 				List<int,int>vI;
+				TimeT fps_interval;
 			}_;
 			inline Window(){
 				if(!SDL_CreateWindowAndRenderer("ABALONCO",size[0],size[1],SDL_WINDOW_RESIZABLE|SDL_WINDOW_HIGH_PIXEL_DENSITY,&_.w,&_.r)){_.w=0;return;}
 				SDL_SetRenderDrawBlendMode(_.r, SDL_BLENDMODE_BLEND);
 				ids.set(id=SDL_GetWindowID(_.w),this);
+				setFPS(fps);
 			}
+			void Draw();void Draw0();
 			inline Window(Mode*c):Window(){(core=c)->window=this;}
 			inline~Window(){if(core){delete core;core=0;}if(!_.w)return;SDL_DestroyRenderer(_.r);SDL_DestroyWindow(_.w);ids[id]=0;}
 			void DrawLine(Vector<int>a,Vector<int>b,SDL_FColor);

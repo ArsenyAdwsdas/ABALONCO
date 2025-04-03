@@ -26,7 +26,7 @@ inline void eventHandle(SDL_Event&e){
 		case SDL_EVENT_WINDOW_FOCUS_LOST:kf->key_unfocus();kfw=0;break;
 		case SDL_EVENT_KEY_DOWN:kfw->keyDown[e.key.scancode]=1;kf->key_down(e.key);break;
 		case SDL_EVENT_KEY_UP:kfw->keyDown[e.key.scancode]=0;kf->key_up(e.key);break;
-		case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:{auto W=w;W->size={e.window.data1,e.window.data2};W->core->resize(e.window);}
+		case SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED:{auto W=w;W->size={e.window.data1,e.window.data2};W->core->resize(e.window);W->drawTime=TimeT(0);}
 	}
 }
 #undef kf
@@ -39,8 +39,8 @@ inline void eventHandle(SDL_Event&e){
 		if(e->type==SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED)ABALONCO::GUI::eventsInMain=0;
 		if(ABALONCO::GUI::eventsInMain)return;
 		eventHandle(*e);
-		if(_){auto w=Window::ids[e->window.windowID];if(w->redraw)w->core->draw();w->core->nowResizing();}
-		else if(e->type==SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED){auto w=Window::ids[e->window.windowID];if(w->redraw)w->core->draw();}
+		if(_){auto w=Window::ids[e->window.windowID];if(w->redraw)w->Draw0();w->core->nowResizing();}
+		else if(e->type==SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED){auto w=Window::ids[e->window.windowID];if(w->redraw)w->Draw0();}
 	}
 #endif
 
@@ -71,7 +71,7 @@ int main(int argc, char const *argv[]){
 			}
 			for(uint16_t i=0;i<Window::ids.count;i++)if(auto w=Window::ids.raw[i].second){
 				w->core->update();
-				if(w->redraw)w->core->draw();
+				if(w->redraw)w->Draw();
 			}
 			if(ABALONCO::close)break;
 			SDL_Delay(2);

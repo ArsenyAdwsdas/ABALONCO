@@ -48,6 +48,19 @@ namespace ABALONCO{
 			SDL_RenderGeometry(_.r,0,_.vIed.raw,_.vIed.cou,_.vI.raw,_.vI.cou);
 			_.vIed.cou=_.vI.cou=0;
 		}
+		inline void Window::Draw(){
+			auto d=getTime();
+			if((d-drawTime0)>_.fps_interval){
+				drawTime0=d;
+				core->draw();
+				drawTime=getTime();
+			}
+		}
+		inline void Window::Draw0(){
+			drawTime0=getTime();
+			core->draw();
+			drawTime=getTime();
+		}
 		inline void Window::Present(){
 			Unschedule();
 			SDL_RenderPresent(_.r);
